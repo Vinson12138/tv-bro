@@ -24,8 +24,8 @@ android {
         applicationId = "com.phlox.tvwebbrowser"
         minSdk = 23
         targetSdk = 33
-        versionCode = 59
-        versionName = "1.8.6"
+        versionCode = 60
+        versionName = "1.8.7"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -69,11 +69,6 @@ android {
             //now auto-update violates Google Play policies
             buildConfigField("Boolean", "BUILT_IN_AUTO_UPDATE", "false")
             manifestPlaceholders["extractNativeLibs"] = "false"
-        }
-        create("amazon") {
-            dimension = "appstore"
-            buildConfigField("Boolean", "BUILT_IN_AUTO_UPDATE", "false")
-            manifestPlaceholders["extractNativeLibs"] = "true"
         }
     }
 
