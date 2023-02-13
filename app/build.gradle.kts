@@ -5,8 +5,8 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
+//    id("com.google.gms.google-services")
+//    id("com.google.firebase.crashlytics")
 }
 
 val properties = Properties()
@@ -33,27 +33,27 @@ android {
             }
         }
     }
-    signingConfigs {
-        create("release") {
-            storeFile = rootProject.file(properties.getProperty("storeFile", ""))
-            storePassword = properties.getProperty("storePassword", "")
-            keyAlias = properties.getProperty("keyAlias", "")
-            keyPassword = properties.getProperty("keyPassword", "")
-        }
-    }
-    buildTypes {
-        getByName("debug") {
-            isDebuggable = true
-            project.setProperty("crashlytics", false)
-        }
-        getByName("release") {
-            isDebuggable = false
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig=signingConfigs.getByName("release")
-            project.setProperty("crashlytics", true)
-        }
-    }
+//    signingConfigs {
+//        create("release") {
+//             storeFile = rootProject.file(properties.getProperty("storeFile", ""))
+//            storePassword = properties.getProperty("storePassword", "")
+//            keyAlias = properties.getProperty("keyAlias", "")
+//            keyPassword = properties.getProperty("keyPassword", "")
+//        }
+//    }
+//    buildTypes {
+//        getByName("debug") {
+//            isDebuggable = true
+//            project.setProperty("crashlytics", false)
+//        }
+//        getByName("release") {
+//            isDebuggable = false
+//            isMinifyEnabled = false
+//            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+//            signingConfig=signingConfigs.getByName("release")
+//            project.setProperty("crashlytics", true)
+//        }
+//    }
 
     flavorDimensions += listOf("appstore")
     productFlavors {
@@ -120,10 +120,10 @@ dependencies {
 
     "debugImplementation"("com.squareup.leakcanary:leakcanary-android:2.7")
 
-    if (project.property("crashlytics") == true) {
-        implementation("com.google.firebase:firebase-core:21.1.1")
-        implementation("com.google.firebase:firebase-crashlytics-ktx:18.3.2")
-    }
+//    if (project.property("crashlytics") == true) {
+//        implementation("com.google.firebase:firebase-core:21.1.1")
+//        implementation("com.google.firebase:firebase-crashlytics-ktx:18.3.2")
+//    }
 }
 
 tasks.getByName("check").dependsOn("lint")
