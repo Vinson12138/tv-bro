@@ -3,46 +3,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
+
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
       android:paddingLeft="22dp"
       android:paddingTop="5dp"
-      android:paddingRight="22dp"
-      >
+      android:paddingRight="22dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/choose_default_search_engine"
-        android:textSize="16sp"
-        />
+        android:textSize="16sp" />
 
     <Spinner
         android:id="@+id/spEngine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:dropDownWidth="300dp"
-        />
+        android:dropDownWidth="300dp" />
 
     <LinearLayout
         android:id="@+id/llURL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
 
       <TextView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="5dp"
           android:text="@string/url"
-          android:textSize="16sp"
-          />
+          android:textSize="16sp" />
 
       <EditText
           android:id="@+id/etUrl"
@@ -51,8 +46,7 @@
           android:ems="10"
           android:hint="@string/search_engine_url_with_query_placeholder_query"
           android:importantForAutofill="no"
-          android:inputType="textUri"
-          />
+          android:inputType="textUri" />
     </LinearLayout>
 
     <LinearLayout
@@ -60,8 +54,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
-        android:paddingTop="5dp"
-        >
+        android:paddingTop="5dp">
+
       <TextView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -69,15 +63,14 @@
           android:ellipsize="end"
           android:lines="1"
           android:text="@string/set_search_engine_as_homepage"
-          android:textSize="16sp"
-          />
+          android:textSize="16sp" />
+
       <androidx.appcompat.widget.SwitchCompat
           android:id="@+id/scSearchEngineHomePage"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_weight="0"
-          android:nextFocusDown="@+id/spTitles"
-          />
+          android:nextFocusDown="@+id/spTitles" />
     </LinearLayout>
 
   </LinearLayout>
@@ -89,38 +82,33 @@
       android:orientation="vertical"
       android:paddingLeft="22dp"
       android:paddingTop="5dp"
-      android:paddingRight="22dp"
-      >
+      android:paddingRight="22dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/choose_user_agent_string"
-        android:textSize="16sp"
-        />
+        android:textSize="16sp" />
 
     <Spinner
         android:id="@+id/spTitles"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:dropDownWidth="300dp"
-        />
+        android:dropDownWidth="300dp" />
 
     <LinearLayout
         android:id="@+id/llUAString"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
 
       <TextView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="5dp"
           android:text="@string/user_agent_string"
-          android:textSize="16sp"
-          />
+          android:textSize="16sp" />
 
       <EditText
           android:id="@+id/etUAString"
@@ -129,8 +117,7 @@
           android:ems="10"
           android:hint="@string/edit_user_agent_string"
           android:importantForAutofill="no"
-          android:inputType="textUri"
-          />
+          android:inputType="textUri" />
     </LinearLayout>
 
   </LinearLayout>
@@ -142,8 +129,8 @@
       android:orientation="horizontal"
       android:paddingLeft="22dp"
       android:paddingTop="5dp"
-      android:paddingRight="22dp"
-      >
+      android:paddingRight="22dp">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -151,14 +138,13 @@
         android:ellipsize="end"
         android:lines="1"
         android:text="@string/toggle_ads_blocking"
-        android:textSize="16sp"
-        />
+        android:textSize="16sp" />
+
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/scAdblock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0"
-        />
+        android:layout_weight="0" />
   </LinearLayout>
 
   <LinearLayout
@@ -169,8 +155,8 @@
       android:orientation="horizontal"
       android:paddingLeft="22dp"
       android:paddingTop="5dp"
-      android:paddingRight="22dp"
-      >
+      android:paddingRight="22dp">
+
     <TextView
         android:id="@+id/tvAdBlockerListInfo"
         android:layout_width="match_parent"
@@ -179,8 +165,8 @@
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:lines="2"
-        tools:text="URL: https://test.com\nLast update: never"
-        />
+        tools:text="URL: https://test.com\nLast update: never" />
+
     <ImageButton
         android:id="@+id/btnAdBlockerUpdate"
         android:layout_width="48dp"
@@ -188,16 +174,15 @@
         android:layout_weight="0"
         android:contentDescription="@string/update_ad_blocker_list"
         android:nextFocusDown="@+id/spTheme"
-        android:src="@drawable/ic_refresh_grey_900_24dp"
-        />
+        android:src="@drawable/ic_refresh_grey_900_24dp" />
+
     <ProgressBar
         android:id="@+id/pbAdBlockerListLoading"
         style="?android:attr/progressBarStyle"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_weight="0"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
   </LinearLayout>
 
@@ -208,22 +193,19 @@
       android:orientation="vertical"
       android:paddingLeft="22dp"
       android:paddingTop="5dp"
-      android:paddingRight="22dp"
-      >
+      android:paddingRight="22dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/theme"
-        android:textSize="16sp"
-        />
+        android:textSize="16sp" />
 
     <Spinner
         android:id="@+id/spTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:dropDownWidth="300dp"
-        />
+        android:dropDownWidth="300dp" />
   </LinearLayout>
 
   <LinearLayout
@@ -233,8 +215,8 @@
       android:orientation="horizontal"
       android:paddingLeft="22dp"
       android:paddingTop="5dp"
-      android:paddingRight="22dp"
-      >
+      android:paddingRight="22dp">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -242,25 +224,25 @@
         android:ellipsize="end"
         android:lines="1"
         android:text="@string/toggle_keep_screen_on"
-        android:textSize="16sp"
-        />
+        android:textSize="16sp" />
+
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/scKeepScreenOn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:nextFocusUp="@+id/spTheme"
         android:layout_weight="0"
-        />
+        android:nextFocusUp="@+id/spTheme" />
   </LinearLayout>
+
   <Button
       android:id="@+id/btnClearWebCache"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="10dp"
       android:layout_marginStart="22dp"
+      android:layout_marginTop="10dp"
       android:text="@string/clear_web_cache" />
+
   <View
       android:layout_width="match_parent"
-      android:layout_height="50dp"
-      />
+      android:layout_height="50dp" />
 </LinearLayout>
