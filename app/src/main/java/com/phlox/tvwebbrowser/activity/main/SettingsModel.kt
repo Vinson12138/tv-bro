@@ -27,10 +27,8 @@ class SettingsModel : ActiveModel() {
     val config = TVBro.config
 
     //Search engines configuration
-    val SearchEnginesTitles = arrayOf("Google", "Bing", "Yahoo!", "DuckDuckGo", "Yandex", "Custom")
-    val SearchEnginesURLs = listOf("https://www.google.com/search?q=[query]", "https://www.bing.com/search?q=[query]",
-            "https://search.yahoo.com/search?p=[query]", "https://duckduckgo.com/?q=[query]",
-            "https://yandex.com/search/?text=[query]", "")
+    val SearchEnginesTitles = arrayOf("Bing", "Custom")
+    val SearchEnginesURLs = listOf("https://www.bing.com/search?q=[query]", "")
     var searchEngineURL = ObservableValue(config.getSearchEngineURL())
     //Home page settings
     var setSearchEngineAsHomePage: Boolean = config.getSearchEngineAsHomePage()
