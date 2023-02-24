@@ -147,7 +147,7 @@ globalState.currentVideoEle = null
 
 if (!globalState.isInitialized) {
   console.log("js inject");
-
+  if (!document.body) return;
   globalState.isInitialized = true;
 
   let keyDebugger = new tv.KeyDebugger();

@@ -53,6 +53,7 @@ import java.net.URLEncoder
 import java.util.*
 
 
+@SuppressLint("HandlerLeak")
 open class MainActivity : AppCompatActivity(), ActionBar.Callback {
     companion object {
         private val TAG = MainActivity::class.java.simpleName
@@ -81,6 +82,7 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
     private val voiceSearchHelper = VoiceSearchHelper(this, VOICE_SEARCH_REQUEST_CODE,
         MY_PERMISSIONS_REQUEST_VOICE_SEARCH_PERMISSIONS)
 
+    private lateinit var timer: Timer
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -212,6 +214,10 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
         }
 
         loadState()
+
+        timer = Timer()
+        timer.schedule(timerTask, 0, 1000)
+        vb.tvTime.visibility = View.GONE
     }
 
     private var progressBarHideRunnable: Runnable = Runnable {
@@ -266,15 +272,45 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
         override fun openInNewTab(url: String, tabIndex: Int) = this@MainActivity.openInNewTab(url, tabIndex, false)
     }
 
-    override fun closeWindow() {
-        Log.d(TAG, "closeWindow")
-        lifecycleScope.launch {
-            if (config.incognitoMode) {
-                toggleIncognitoMode(false).join()
+    private val timerTask = object : TimerTask() {
+
+        override fun run() {
+            val cal = Calendar.getInstance()
+            val hour = cal.get(Calendar.HOUR_OF_DAY)
+            val minute = cal.get(Calendar.MINUTE)
+            val second = cal.get(Calendar.SECOND)
+
+            val msg = Message()
+            if (minute % 15 == 0) {
+                msg.obj = String.format("%02d:%02d:%02d", hour, minute, second)
+                msg.what = 1
+            } else {
+                msg.what = 0
             }
-            finish()
+
+            handler.sendMessage(msg)
         }
     }
+    private val handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            if(msg.what == 1) {
+                vb.tvTime.visibility = View.VISIBLE
+                vb.tvTime.text = "${msg.obj}"
+            }
+            else {
+                vb.tvTime.visibility = View.GONE
+            }
+        }
+    }
+//    override fun closeWindow() {
+//        Log.d(TAG, "closeWindow")
+//        lifecycleScope.launch {
+//            if (config.incognitoMode) {
+//                toggleIncognitoMode(false).join()
+//            }
+//            finish()
+//        }
+//    }
 
     override fun showDownloads() {
         startActivity(Intent(this@MainActivity, DownloadsActivity::class.java))
@@ -726,9 +762,9 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
         }
     }
 
-    override fun toggleIncognitoMode() {
-        toggleIncognitoMode(true)
-    }
+//    override fun toggleIncognitoMode() {
+//        toggleIncognitoMode(true)
+//    }
 
     override fun setFullscreen(fullscreen: Boolean) {
         Log.d(TAG, "setFullscreen $fullscreen")
@@ -965,19 +1001,19 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
         showMenuOverlay()
     }
 
-    override fun initiateVoiceSearch() {
-        hideMenuOverlay()
-        voiceSearchHelper.initiateVoiceSearch(object : VoiceSearchHelper.Callback {
-            override fun onResult(text: String?) {
-                if (text == null) {
-                    Utils.showToast(this@MainActivity, getString(R.string.can_not_recognize))
-                    return
-                }
-                search(text)
-                hideMenuOverlay()
-            }
-        })
-    }
+//    override fun initiateVoiceSearch() {
+//        hideMenuOverlay()
+//        voiceSearchHelper.initiateVoiceSearch(object : VoiceSearchHelper.Callback {
+//            override fun onResult(text: String?) {
+//                if (text == null) {
+//                    Utils.showToast(this@MainActivity, getString(R.string.can_not_recognize))
+//                    return
+//                }
+//                search(text)
+//                hideMenuOverlay()
+//            }
+//        })
+//    }
 
     private inner class WebViewCallback(val tab: WebTabState): WebViewEx.Callback {
         override fun getActivity(): Activity {

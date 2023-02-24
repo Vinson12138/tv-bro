@@ -31,22 +31,22 @@ class ActionBar @JvmOverloads constructor(
     private var extendedAddressBarMode = false
 
     interface Callback {
-        fun closeWindow()
+//        fun closeWindow()
         fun showDownloads()
         fun showFavorites()
         fun showHistory()
         fun showSettings()
-        fun initiateVoiceSearch()
+//        fun initiateVoiceSearch()
         fun search(text: String)
         fun onExtendedAddressBarMode()
         fun onUrlInputDone()
-        fun toggleIncognitoMode()
+//        fun toggleIncognitoMode()
         fun setFullscreen(fullscreen: Boolean)
     }
 
     private val etUrlFocusChangeListener = OnFocusChangeListener { _, focused ->
         if (focused) {
-            enterExtendedAddressBarMode()
+//            enterExtendedAddressBarMode()
 
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -65,7 +65,7 @@ class ActionBar @JvmOverloads constructor(
                     val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(vb.etUrl.windowToken, 0)
                     callback?.search(vb.etUrl.text.toString())
-                    dismissExtendedAddressBarMode()
+//                    dismissExtendedAddressBarMode()
                     callback?.onUrlInputDone()
                 }
                 return@OnKeyListener true
@@ -85,21 +85,21 @@ class ActionBar @JvmOverloads constructor(
 
         val incognitoMode = TVBro.config.incognitoMode
 
-        vb.ibMenu.setOnClickListener { callback?.closeWindow() }
+//        vb.ibMenu.setOnClickListener { callback?.closeWindow() }
         vb.ibDownloads.setOnClickListener { callback?.showDownloads() }
         vb.ibFavorites.setOnClickListener { callback?.showFavorites() }
         vb.ibHistory.setOnClickListener { callback?.showHistory() }
-        vb.ibIncognito.setOnClickListener { callback?.toggleIncognitoMode() }
+//        vb.ibIncognito.setOnClickListener { callback?.toggleIncognitoMode() }
         vb.ibSettings.setOnClickListener { callback?.showSettings() }
 
-        if (Utils.isFireTV(context)) {
-            vb.ibMenu.nextFocusRightId = R.id.ibHistory
-            removeView(vb.ibVoiceSearch)
-        } else {
-            vb.ibVoiceSearch.setOnClickListener { callback?.initiateVoiceSearch() }
-        }
+//        if (Utils.isFireTV(context)) {
+//            vb.ibMenu.nextFocusRightId = R.id.ibHistory
+//            removeView(vb.ibVoiceSearch)
+//        } else {
+//            vb.ibVoiceSearch.setOnClickListener { callback?.initiateVoiceSearch() }
+//        }
 
-        vb.ibIncognito.isChecked = incognitoMode
+//        vb.ibIncognito.isChecked = incognitoMode
 
         vb.etUrl.onFocusChangeListener = etUrlFocusChangeListener
 
@@ -155,6 +155,7 @@ class ActionBar @JvmOverloads constructor(
     }
 
     fun catchFocus() {
-        vb.ibMenu.requestFocus()
+//        vb.ibMenu.requestFocus()
+        vb.ibFavorites.requestFocus()
     }
 }
