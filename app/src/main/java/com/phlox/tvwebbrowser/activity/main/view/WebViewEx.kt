@@ -155,6 +155,8 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
             }
         }
 
+        settings.setSupportMultipleWindows(false)
+        
         /*scrollBarStyle = WebView.SCROLLBARS_OUTSIDE_OVERLAY
         isScrollbarFadingEnabled = false*/
 
