@@ -41,6 +41,7 @@ class ActionBar @JvmOverloads constructor(
         fun onExtendedAddressBarMode()
         fun onUrlInputDone()
         fun toggleIncognitoMode()
+        fun setFullscreen(fullscreen: Boolean)
     }
 
     private val etUrlFocusChangeListener = OnFocusChangeListener { _, focused ->

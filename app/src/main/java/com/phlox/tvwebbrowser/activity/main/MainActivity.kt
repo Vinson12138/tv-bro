@@ -730,6 +730,12 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
         toggleIncognitoMode(true)
     }
 
+    override fun setFullscreen(fullscreen: Boolean) {
+        Log.d(TAG, "setFullscreen $fullscreen")
+        this.vb.flFullscreenContainer.fullScreenMode = fullscreen
+    }
+
+
     private fun toggleIncognitoMode(andSwitchProcess: Boolean) = lifecycleScope.launch(Dispatchers.Main) {
         Log.d(TAG, "toggleIncognitoMode andSwitchProcess: $andSwitchProcess")
         val becomingIncognitoMode = !config.incognitoMode
@@ -778,6 +784,9 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         val shortcutMgr = ShortcutMgr.getInstance()
         val keyCode = if (event.keyCode != 0) event.keyCode else event.scanCode
+
+        //如果按下不松开，则会一直间断的派发action_down
+        //Log.d(TAG, "-- keyEvent --: $keyCode action=${event.action}")
 
         if (keyCode == KeyEvent.KEYCODE_BACK && fullScreenView != null) {
             if (event.action == KeyEvent.ACTION_UP) {

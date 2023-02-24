@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.os.SystemClock
 import android.util.AttributeSet
+import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.WindowManager
@@ -40,6 +41,7 @@ class CursorLayout : FrameLayout {
     private val scrollHackCoords = PointF()
     private val scrollHackActiveRect = Rect()
     var fingerMode = false
+    var fullScreenMode = false
 
     private val isCursorDissappear: Boolean
         get() {
@@ -99,106 +101,131 @@ class CursorLayout : FrameLayout {
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         callback?.onUserInteraction()
         val keyCode = event.keyCode
-        val action = event.action
-        when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_LEFT -> {
-                if (event.action == KeyEvent.ACTION_DOWN) {
-                    handleDirectionKeyEvent(event, -1, UNCHANGED, true)
-                } else if (event.action == KeyEvent.ACTION_UP) {
-                    handleDirectionKeyEvent(event, 0, UNCHANGED, false)
+
+        if (fullScreenMode) {
+            Log.d("CursorLayout", "-- keyEvent fullscreen --: $keyCode action=${event.action}")
+
+            when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_CENTER,
+                KeyEvent.KEYCODE_ENTER,
+                KeyEvent.KEYCODE_NUMPAD_ENTER,
+                KeyEvent.KEYCODE_BUTTON_A -> {
+                    if (event.action == KeyEvent.ACTION_DOWN && !keyDispatcherState.isTracking(event)) {
+                        dispatchMotionEvent(cursorPosition.x, cursorPosition.y, MotionEvent.ACTION_DOWN)
+                    } else if (event.action == KeyEvent.ACTION_UP) {
+                        dispatchMotionEvent(cursorPosition.x, cursorPosition.y, MotionEvent.ACTION_UP)
+                    }
+                    return true
                 }
-                return true
-            }
-            KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                if (event.action == KeyEvent.ACTION_DOWN) {
-                    handleDirectionKeyEvent(event, 1, UNCHANGED, true)
-                } else if (event.action == KeyEvent.ACTION_UP) {
-                    handleDirectionKeyEvent(event, 0, UNCHANGED, false)
-                }
-                return true
-            }
-            KeyEvent.KEYCODE_DPAD_UP -> {
-                if (event.action == KeyEvent.ACTION_DOWN) {
-                    handleDirectionKeyEvent(event, UNCHANGED, -1, true)
-                } else if (event.action == KeyEvent.ACTION_UP) {
-                    handleDirectionKeyEvent(event, UNCHANGED, 0, false)
-                }
-                return true
-            }
-            KeyEvent.KEYCODE_DPAD_DOWN -> {
-                if (event.action == KeyEvent.ACTION_DOWN) {
-                    handleDirectionKeyEvent(event, UNCHANGED, 1, true)
-                } else if (event.action == KeyEvent.ACTION_UP) {
-                    handleDirectionKeyEvent(event, UNCHANGED, 0, false)
-                }
-                return true
             }
 
-            KeyEvent.KEYCODE_DPAD_UP_LEFT -> {
-                if (event.action == KeyEvent.ACTION_DOWN) {
-                    handleDirectionKeyEvent(event, -1, -1, true)
-                } else if (event.action == KeyEvent.ACTION_UP) {
-                    handleDirectionKeyEvent(event, 0, 0, false)
+        } else {
+            when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> {
+                    if (event.action == KeyEvent.ACTION_DOWN) {
+                        handleDirectionKeyEvent(event, -1, UNCHANGED, true)
+                    } else if (event.action == KeyEvent.ACTION_UP) {
+                        handleDirectionKeyEvent(event, 0, UNCHANGED, false)
+                    }
+                    return true
                 }
-                return true
-            }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                    if (event.action == KeyEvent.ACTION_DOWN) {
+                        handleDirectionKeyEvent(event, 1, UNCHANGED, true)
+                    } else if (event.action == KeyEvent.ACTION_UP) {
+                        handleDirectionKeyEvent(event, 0, UNCHANGED, false)
+                    }
+                    return true
+                }
+                KeyEvent.KEYCODE_DPAD_UP -> {
+                    if (event.action == KeyEvent.ACTION_DOWN) {
+                        handleDirectionKeyEvent(event, UNCHANGED, -1, true)
+                    } else if (event.action == KeyEvent.ACTION_UP) {
+                        handleDirectionKeyEvent(event, UNCHANGED, 0, false)
+                    }
+                    return true
+                }
+                KeyEvent.KEYCODE_DPAD_DOWN -> {
+                    if (event.action == KeyEvent.ACTION_DOWN) {
+                        handleDirectionKeyEvent(event, UNCHANGED, 1, true)
+                    } else if (event.action == KeyEvent.ACTION_UP) {
+                        handleDirectionKeyEvent(event, UNCHANGED, 0, false)
+                    }
+                    return true
+                }
 
-            KeyEvent.KEYCODE_DPAD_UP_RIGHT -> {
-                if (event.action == KeyEvent.ACTION_DOWN) {
-                    handleDirectionKeyEvent(event, 1, -1, true)
-                } else if (event.action == KeyEvent.ACTION_UP) {
-                    handleDirectionKeyEvent(event, 0, 0, false)
+                KeyEvent.KEYCODE_DPAD_UP_LEFT -> {
+                    if (event.action == KeyEvent.ACTION_DOWN) {
+                        handleDirectionKeyEvent(event, -1, -1, true)
+                    } else if (event.action == KeyEvent.ACTION_UP) {
+                        handleDirectionKeyEvent(event, 0, 0, false)
+                    }
+                    return true
                 }
-                return true
-            }
 
-            KeyEvent.KEYCODE_DPAD_DOWN_LEFT -> {
-                if (event.action == KeyEvent.ACTION_DOWN) {
-                    handleDirectionKeyEvent(event, -1, 1, true)
-                } else if (event.action == KeyEvent.ACTION_UP) {
-                    handleDirectionKeyEvent(event, 0, 0, false)
+                KeyEvent.KEYCODE_DPAD_UP_RIGHT -> {
+                    if (event.action == KeyEvent.ACTION_DOWN) {
+                        handleDirectionKeyEvent(event, 1, -1, true)
+                    } else if (event.action == KeyEvent.ACTION_UP) {
+                        handleDirectionKeyEvent(event, 0, 0, false)
+                    }
+                    return true
                 }
-                return true
-            }
 
-            KeyEvent.KEYCODE_DPAD_DOWN_RIGHT -> {
-                if (event.action == KeyEvent.ACTION_DOWN) {
-                    handleDirectionKeyEvent(event, 1, 1, true)
-                } else if (event.action == KeyEvent.ACTION_UP) {
-                    handleDirectionKeyEvent(event, 0, 0, false)
+                KeyEvent.KEYCODE_DPAD_DOWN_LEFT -> {
+                    if (event.action == KeyEvent.ACTION_DOWN) {
+                        handleDirectionKeyEvent(event, -1, 1, true)
+                    } else if (event.action == KeyEvent.ACTION_UP) {
+                        handleDirectionKeyEvent(event, 0, 0, false)
+                    }
+                    return true
                 }
-                return true
-            }
-            KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER, KeyEvent.KEYCODE_BUTTON_A -> {
-                if (event.action == KeyEvent.ACTION_DOWN && !keyDispatcherState.isTracking(event)) {
-                    if (fingerMode) {
-                        exitFingerMode()
-                        return false
-                    } else {
-                        keyDispatcherState.startTracking(event, this)
-                        if (!isCursorDissappear) {
-                            dpadCenterPressed = true
-                            dispatchMotionEvent(cursorPosition.x, cursorPosition.y, MotionEvent.ACTION_DOWN)
+
+                KeyEvent.KEYCODE_DPAD_DOWN_RIGHT -> {
+                    if (event.action == KeyEvent.ACTION_DOWN) {
+                        handleDirectionKeyEvent(event, 1, 1, true)
+                    } else if (event.action == KeyEvent.ACTION_UP) {
+                        handleDirectionKeyEvent(event, 0, 0, false)
+                    }
+                    return true
+                }
+
+                KeyEvent.KEYCODE_DPAD_CENTER,
+                KeyEvent.KEYCODE_ENTER,
+                KeyEvent.KEYCODE_NUMPAD_ENTER,
+                KeyEvent.KEYCODE_BUTTON_A -> {
+                    if (event.action == KeyEvent.ACTION_DOWN && !keyDispatcherState.isTracking(event)) {
+                        Log.d("CursorLayout", "keyDown ${event.keyCode} $fingerMode $isCursorDissappear")
+                        if (fingerMode) {
+                            exitFingerMode()
+                            return false
+                        } else {
+                            keyDispatcherState.startTracking(event, this)
+                            if (!isCursorDissappear) {
+                                dpadCenterPressed = true
+                                dispatchMotionEvent(cursorPosition.x, cursorPosition.y, MotionEvent.ACTION_DOWN)
+                                postInvalidate()
+                            }
+                        }
+                    } else if (event.action == KeyEvent.ACTION_UP) {
+                        Log.d("CursorLayout", "keyUp ${event.keyCode} $fingerMode $isCursorDissappear")
+                        keyDispatcherState.handleUpEvent(event)
+    //                    loadUrl("javascript:function simulateClick(x,y){var clickEvent=document.createEvent('MouseEvents');clickEvent.initMouseEvent('click',true,true,window,0,0,0,x,y,false,false,false,false,0,null);document.elementFromPoint(x,y).dispatchEvent(clickEvent)}simulateClick("+(int)cursorPosition.x+","+(int)cursorPosition.y+");");
+                        // Obtain MotionEvent object
+                        if (fingerMode) {
+                            //nop
+                        } else if (isCursorDissappear) {
+                            lastCursorUpdate = System.currentTimeMillis()
+                            postInvalidate()
+                        } else {
+                            dispatchMotionEvent(cursorPosition.x, cursorPosition.y, MotionEvent.ACTION_UP)
+                            dpadCenterPressed = false
                             postInvalidate()
                         }
                     }
-                } else if (event.action == KeyEvent.ACTION_UP) {
-                    keyDispatcherState.handleUpEvent(event)
-                    //loadUrl("javascript:function simulateClick(x,y){var clickEvent=document.createEvent('MouseEvents');clickEvent.initMouseEvent('click',true,true,window,0,0,0,x,y,false,false,false,false,0,null);document.elementFromPoint(x,y).dispatchEvent(clickEvent)}simulateClick("+(int)cursorPosition.x+","+(int)cursorPosition.y+");");
-                    // Obtain MotionEvent object
-                    if (fingerMode) {
-                        //nop
-                    } else if (isCursorDissappear) {
-                        lastCursorUpdate = System.currentTimeMillis()
-                        postInvalidate()
-                    } else {
-                        dispatchMotionEvent(cursorPosition.x, cursorPosition.y, MotionEvent.ACTION_UP)
-                        dpadCenterPressed = false
-                        postInvalidate()
-                    }
-                }
 
-                return true
+                    return true
+                }
             }
         }
 

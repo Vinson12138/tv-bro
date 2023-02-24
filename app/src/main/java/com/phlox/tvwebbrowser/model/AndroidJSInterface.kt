@@ -2,6 +2,7 @@ package com.phlox.tvwebbrowser.model
 
 import android.content.Context
 import android.net.http.SslError
+import android.util.Log
 import android.webkit.JavascriptInterface
 import com.phlox.tvwebbrowser.R
 import com.phlox.tvwebbrowser.TVBro
@@ -82,6 +83,12 @@ class AndroidJSInterface(private val mainActivityViewModel: MainActivityViewMode
         mainActivityViewModel.onDownloadRequested(activity, url, "",
                 finalFileName, "TV Bro",
             mimetype, Download.OperationAfterDownload.NOP, base64BlobData)
+    }
+
+    @JavascriptInterface
+    fun onFullscreenChanged(fullscreen: Boolean) {
+        Log.d("JS2Android", "fullscreenChanged: $fullscreen")
+        activity?.runOnUiThread { activity?.setFullscreen(fullscreen) }
     }
 
     fun setActivity(activity: MainActivity?) {
