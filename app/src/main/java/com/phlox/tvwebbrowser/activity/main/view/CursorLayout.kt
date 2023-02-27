@@ -103,21 +103,8 @@ class CursorLayout : FrameLayout {
         val keyCode = event.keyCode
 
         if (fullScreenMode) {
-            Log.d("CursorLayout", "-- keyEvent fullscreen --: $keyCode action=${event.action}")
 
-            when (keyCode) {
-                KeyEvent.KEYCODE_DPAD_CENTER,
-                KeyEvent.KEYCODE_ENTER,
-                KeyEvent.KEYCODE_NUMPAD_ENTER,
-                KeyEvent.KEYCODE_BUTTON_A -> {
-                    if (event.action == KeyEvent.ACTION_DOWN && !keyDispatcherState.isTracking(event)) {
-                        dispatchMotionEvent(cursorPosition.x, cursorPosition.y, MotionEvent.ACTION_DOWN)
-                    } else if (event.action == KeyEvent.ACTION_UP) {
-                        dispatchMotionEvent(cursorPosition.x, cursorPosition.y, MotionEvent.ACTION_UP)
-                    }
-                    return true
-                }
-            }
+
 
         } else {
             when (keyCode) {
@@ -195,7 +182,10 @@ class CursorLayout : FrameLayout {
                 KeyEvent.KEYCODE_NUMPAD_ENTER,
                 KeyEvent.KEYCODE_BUTTON_A -> {
                     if (event.action == KeyEvent.ACTION_DOWN && !keyDispatcherState.isTracking(event)) {
-                        Log.d("CursorLayout", "keyDown ${event.keyCode} $fingerMode $isCursorDissappear")
+                        Log.d(
+                            "CursorLayout",
+                            "keyDown ${event.keyCode} $fingerMode $isCursorDissappear"
+                        )
                         if (fingerMode) {
                             exitFingerMode()
                             return false
@@ -203,14 +193,21 @@ class CursorLayout : FrameLayout {
                             keyDispatcherState.startTracking(event, this)
                             if (!isCursorDissappear) {
                                 dpadCenterPressed = true
-                                dispatchMotionEvent(cursorPosition.x, cursorPosition.y, MotionEvent.ACTION_DOWN)
+                                dispatchMotionEvent(
+                                    cursorPosition.x,
+                                    cursorPosition.y,
+                                    MotionEvent.ACTION_DOWN
+                                )
                                 postInvalidate()
                             }
                         }
                     } else if (event.action == KeyEvent.ACTION_UP) {
-                        Log.d("CursorLayout", "keyUp ${event.keyCode} $fingerMode $isCursorDissappear")
+                        Log.d(
+                            "CursorLayout",
+                            "keyUp ${event.keyCode} $fingerMode $isCursorDissappear"
+                        )
                         keyDispatcherState.handleUpEvent(event)
-    //                    loadUrl("javascript:function simulateClick(x,y){var clickEvent=document.createEvent('MouseEvents');clickEvent.initMouseEvent('click',true,true,window,0,0,0,x,y,false,false,false,false,0,null);document.elementFromPoint(x,y).dispatchEvent(clickEvent)}simulateClick("+(int)cursorPosition.x+","+(int)cursorPosition.y+");");
+                        //                    loadUrl("javascript:function simulateClick(x,y){var clickEvent=document.createEvent('MouseEvents');clickEvent.initMouseEvent('click',true,true,window,0,0,0,x,y,false,false,false,false,0,null);document.elementFromPoint(x,y).dispatchEvent(clickEvent)}simulateClick("+(int)cursorPosition.x+","+(int)cursorPosition.y+");");
                         // Obtain MotionEvent object
                         if (fingerMode) {
                             //nop
@@ -218,7 +215,11 @@ class CursorLayout : FrameLayout {
                             lastCursorUpdate = System.currentTimeMillis()
                             postInvalidate()
                         } else {
-                            dispatchMotionEvent(cursorPosition.x, cursorPosition.y, MotionEvent.ACTION_UP)
+                            dispatchMotionEvent(
+                                cursorPosition.x,
+                                cursorPosition.y,
+                                MotionEvent.ACTION_UP
+                            )
                             dpadCenterPressed = false
                             postInvalidate()
                         }
@@ -248,9 +249,11 @@ class CursorLayout : FrameLayout {
         pc1.pressure = 1f
         pc1.size = 1f
         pointerCoords[0] = pc1
-        val motionEvent = MotionEvent.obtain(downTime, eventTime,
-                action, 1, properties,
-                pointerCoords, 0, 0, 1f, 1f, 0, 0, 0, 0)
+        val motionEvent = MotionEvent.obtain(
+            downTime, eventTime,
+            action, 1, properties,
+            pointerCoords, 0, 0, 1f, 1f, 0, 0, 0, 0
+        )
         dispatchTouchEvent(motionEvent)
     }
 
@@ -267,26 +270,45 @@ class CursorLayout : FrameLayout {
             keyDispatcherState.handleUpEvent(event)
             cursorSpeed.set(0f, 0f)
             if (scrollHackStarted) {
-                dispatchMotionEvent(scrollHackCoords.x, scrollHackCoords.y, MotionEvent.ACTION_CANCEL)
+                dispatchMotionEvent(
+                    scrollHackCoords.x,
+                    scrollHackCoords.y,
+                    MotionEvent.ACTION_CANCEL
+                )
                 scrollHackStarted = false
             }
         }
 
-        cursorDirection.set(if (x == UNCHANGED) cursorDirection.x else x, if (y == UNCHANGED) cursorDirection.y else y)
+        cursorDirection.set(
+            if (x == UNCHANGED) cursorDirection.x else x,
+            if (y == UNCHANGED) cursorDirection.y else y
+        )
     }
 
     private fun scrollWebViewBy(wv: WebViewEx, scrollX: Int, scrollY: Int) {
         if (scrollX == 0 && scrollY == 0) {
             return
         }
-        if ((scrollX != 0 && wv.canScrollHorizontally(scrollX)) || (scrollY != 0 && wv.canScrollVertically(scrollY))) {
+        if ((scrollX != 0 && wv.canScrollHorizontally(scrollX)) || (scrollY != 0 && wv.canScrollVertically(
+                scrollY
+            ))
+        ) {
             wv.scrollTo(wv.scrollX + scrollX, wv.scrollY + scrollY)
         } else if (USE_SCROLL_HACK && !dpadCenterPressed) {
             var justStarted = false
             if (!scrollHackStarted) {
                 scrollHackCoords.set(
-                        bound(cursorPosition.x, scrollHackActiveRect.left.toFloat(), scrollHackActiveRect.right.toFloat()),
-                        bound(cursorPosition.y, scrollHackActiveRect.top.toFloat(), scrollHackActiveRect.bottom.toFloat()))
+                    bound(
+                        cursorPosition.x,
+                        scrollHackActiveRect.left.toFloat(),
+                        scrollHackActiveRect.right.toFloat()
+                    ),
+                    bound(
+                        cursorPosition.y,
+                        scrollHackActiveRect.top.toFloat(),
+                        scrollHackActiveRect.bottom.toFloat()
+                    )
+                )
                 dispatchMotionEvent(scrollHackCoords.x, scrollHackCoords.y, MotionEvent.ACTION_DOWN)
                 scrollHackStarted = true
                 justStarted = true
@@ -294,10 +316,15 @@ class CursorLayout : FrameLayout {
             scrollHackCoords.x -= scrollX
             scrollHackCoords.y -= scrollY
             if (scrollHackCoords.x < scrollHackActiveRect.left || scrollHackCoords.x >= scrollHackActiveRect.right ||
-                    scrollHackCoords.y < scrollHackActiveRect.top || scrollHackCoords.y >= scrollHackActiveRect.bottom) {
+                scrollHackCoords.y < scrollHackActiveRect.top || scrollHackCoords.y >= scrollHackActiveRect.bottom
+            ) {
                 scrollHackCoords.x += scrollX
                 scrollHackCoords.y += scrollY
-                dispatchMotionEvent(scrollHackCoords.x, scrollHackCoords.y, MotionEvent.ACTION_CANCEL)
+                dispatchMotionEvent(
+                    scrollHackCoords.x,
+                    scrollHackCoords.y,
+                    MotionEvent.ACTION_CANCEL
+                )
                 scrollHackStarted = false
                 if (!justStarted) {
                     scrollWebViewBy(wv, scrollX, scrollY)
@@ -380,8 +407,20 @@ class CursorLayout : FrameLayout {
 
             val accelerationFactor = 0.05f * dTime
             //float decelerationFactor = 1 - Math.min(0.5f, 0.005f * dTime);
-            cursorSpeed.set(bound(cursorSpeed.x/* * decelerationFactor*/ + bound(cursorDirection.x.toFloat(), 1f) * accelerationFactor, maxCursorSpeed),
-                    bound(cursorSpeed.y/* * decelerationFactor*/ + bound(cursorDirection.y.toFloat(), 1f) * accelerationFactor, maxCursorSpeed))
+            cursorSpeed.set(
+                bound(
+                    cursorSpeed.x/* * decelerationFactor*/ + bound(
+                        cursorDirection.x.toFloat(),
+                        1f
+                    ) * accelerationFactor, maxCursorSpeed
+                ),
+                bound(
+                    cursorSpeed.y/* * decelerationFactor*/ + bound(
+                        cursorDirection.y.toFloat(),
+                        1f
+                    ) * accelerationFactor, maxCursorSpeed
+                )
+            )
             if (Math.abs(cursorSpeed.x) < 0.1f) cursorSpeed.x = 0f
             if (Math.abs(cursorSpeed.y) < 0.1f) cursorSpeed.y = 0f
             if (cursorDirection.x == 0 && cursorDirection.y == 0 && cursorSpeed.x == 0f && cursorSpeed.y == 0f) {

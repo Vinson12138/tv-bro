@@ -278,11 +278,11 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
             val cal = Calendar.getInstance()
             val hour = cal.get(Calendar.HOUR_OF_DAY)
             val minute = cal.get(Calendar.MINUTE)
-            val second = cal.get(Calendar.SECOND)
+//            val second = cal.get(Calendar.SECOND)
 
             val msg = Message()
             if (minute % 15 == 0) {
-                msg.obj = String.format("%02d:%02d:%02d", hour, minute, second)
+                msg.obj = String.format("%02d:%02d", hour, minute)
                 msg.what = 1
             } else {
                 msg.what = 0

@@ -89,9 +89,23 @@ class AdblockModel : ActiveModel() {
         clientLoading.value = false
     }
 
+    private val regexp = Regex("""https:\/\/.*((img\.(\d+\w+)|(\w+\d+))|(ap-beijing\.myqcloud))\.com""")
+    private val adUrls = arrayOf(
+        "https://image.uc.cn",
+        "https://p3.douyinpic.com",
+        "https://alljson.yxirxrf.cn"
+    )
     fun isAd(request: WebResourceRequest, baseUri: Uri): Boolean {
         val client = client ?: return false
         val baseHost = baseUri.host
+
+        val url = request.url.toString()
+        if(regexp.containsMatchIn(url)) return true
+
+        adUrls.forEach {
+            if(url.contains(it)) return true
+        }
+
         val filterOption = try {
             Utils.mapRequestToFilterOption(request)
         } catch (e: Exception) {

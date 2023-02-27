@@ -43,7 +43,7 @@ import java.util.*
 class WebViewEx(context: Context, val callback: Callback, val jsInterface: AndroidJSInterface) : WebView(context) {
     companion object {
         val TAG = WebViewEx::class.java.simpleName
-        const val WEB_VIEW_TAG = "TV Bro WebView"
+        const val WEB_VIEW_TAG = "WebViewJS"
         const val INTERNAL_SCHEME = "internal://"
         const val INTERNAL_SCHEME_WARNING_DOMAIN = "warning"
         const val INTERNAL_SCHEME_WARNING_DOMAIN_TYPE_CERT = "certificate"
@@ -369,9 +369,9 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
                 //Log.d(TAG, "shouldInterceptRequest url: ${request.url}")
 
-                if (!callback.isAdBlockingEnabled()) {
-                    return super.shouldInterceptRequest(view, request)
-                }
+//                if (!callback.isAdBlockingEnabled()) {
+//                    return super.shouldInterceptRequest(view, request)
+//                }
 
                 val ad = currentOriginalUrl?.let { callback.isAd(request, it)} ?: false
                 return if (ad) {

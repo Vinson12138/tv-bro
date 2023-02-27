@@ -145,14 +145,13 @@ window.globalState = window.globalState || {
 
 globalState.currentVideoEle = null
 
-if (!globalState.isInitialized) {
+if (!globalState.isInitialized && document.body) {
   console.log("js inject");
-  if (!document.body) return;
+
   globalState.isInitialized = true;
 
   let keyDebugger = new tv.KeyDebugger();
   document.body.appendChild(keyDebugger.dom);
-
 
   Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
     get: function () {
@@ -160,13 +159,22 @@ if (!globalState.isInitialized) {
     }
   })
 
+
+  function tryRemoveAd() {
+    let btn = document.querySelector("a.h2_closeclick")
+    if (btn) {
+      btn.click();
+    }
+  }
+  setInterval(tryRemoveAd, 100);
   /**
    * @param {PointerEvent} e 
    */
   function tvClickListener(e) {
-    console.log(`click: pointerType: ${e.pointerType}`)
+    let tagName = e.target.tagName.toUpperCase();
+    console.log(`click: pointerType: ${e.pointerType}, tag:${tagName}`)
 
-    if (e.target.tagName.toUpperCase() == "A" && e.target.attributes.href.value.toLowerCase().startsWith("blob:")) {
+    if (tagName == "A" && e.target.attributes.href.value.toLowerCase().startsWith("blob:")) {
       var fileName = e.target.download;
       var url = e.target.attributes.href.value;
       var xhr = new XMLHttpRequest();
@@ -187,6 +195,7 @@ if (!globalState.isInitialized) {
       e.stopPropagation();
       e.preventDefault();
     }
+
   }
   /**
    * @param {MouseEvent} e 
@@ -197,11 +206,10 @@ if (!globalState.isInitialized) {
     let tagName = e.target.tagName.toLowerCase();
     if (tagName == "video") {
       if (!globalState.isFullScreen) {
-        globalState.isFullScreen = true;
         e.target.requestFullscreen()
       }
       else {
-        tvBroTogglePlayback()
+        e.target.exitFullscreen()
       }
     }
 
@@ -212,7 +220,15 @@ if (!globalState.isInitialized) {
    * @param {KeyboardEvent} e 
    */
   function tvKeyPressListener(e) {
-    console.log(`keypress: key:${e.key}, code:${e.code}`)
+    let tagName = e.target.tagName.toLowerCase();
+    console.log(`keypress: key:${e.key}, code:${e.code} tag:${tagName}`)
+    if (e.key === "Enter") {
+      if (globalState.isFullScreen) {
+        tvBroTogglePlayback();
+      }
+
+    }
+
   }
 
   let evtWrapper = new tv.EventWrapper(document);
@@ -231,12 +247,11 @@ if (!globalState.isInitialized) {
 
 }
 
-
-
 window.tvBroTogglePlayback = function () {
   var video = document.querySelector('video');
   var audio = document.querySelector('audio');
   if (video) {
+    console.log("togglePlay currentVideo", video.playing)
     if (video.playing) {
       video.pause();
     } else {
