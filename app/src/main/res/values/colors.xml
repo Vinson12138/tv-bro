@@ -6,11 +6,11 @@
     <color name="top_bar_background2">#fff</color>
 
     <color name="day_night_text_color">#777</color>
-    <color name="day_night_text_color_contrast">#000</color>
-    <color name="day_night_background_color">#eee</color>
+    <color name="day_night_text_color_contrast">#FFFFFF</color>
+    <color name="day_night_background_color">#FFFFFF</color>
 
-    <color name="day_night_list_header_background_color">#ccc</color>
-    <color name="day_night_list_focused_background_color">#ACE0F4</color>
+    <color name="day_night_list_header_background_color">#A8A8A8</color>
+    <color name="day_night_list_focused_background_color">#9FD9FF</color>
     <color name="day_night_list_divider_color">#DFDFDF</color>
 
     <color name="button_background">#d0d9e1</color>
@@ -26,7 +26,7 @@
     <color name="badge_stroke">#afafaf</color>
 
     <color name="web_tab_text_color">#000</color>
-    <color name="web_tab_selected_text_color">#57BCFF</color>
+    <color name="web_tab_selected_text_color">#9984E6FF</color>
 
     <color name="settings_tab_color">#EBEBEB</color>
     <color name="settings_tab_color_focused">#ade1f5</color>

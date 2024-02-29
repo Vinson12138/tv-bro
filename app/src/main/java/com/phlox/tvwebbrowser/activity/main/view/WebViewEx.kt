@@ -84,7 +84,7 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
         fun requestPermissions(array: Array<String>, geo: Boolean)
         fun shouldOverrideUrlLoading(url: String): Boolean
         fun onPageStarted(url: String?)
-        fun onPageFinished(url: String?, loadFail:Boolean)
+        fun onPageFinished(url: String?)
         fun onPageCertificateError(url: String?)
         fun isAdBlockingEnabled(): Boolean
         fun isDialogsBlockingEnabled(): Boolean
@@ -397,7 +397,7 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 Log.d(TAG, "onPageFinished url: $url")
-                callback.onPageFinished(url, hasLastError)
+                callback.onPageFinished(url)
 
                 if(hasLastError) return
 
@@ -410,7 +410,7 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
             }
 
             override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
-                Log.e(TAG, "onReceivedError url: ${request?.url} ${error?.description}")
+                Log.e(TAG, "onReceivedError ${error?.description} url: ${request?.url}")
                 super.onReceivedError(view, request, error)
                 hasLastError = true
             }

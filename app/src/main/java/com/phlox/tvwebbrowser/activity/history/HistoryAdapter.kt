@@ -72,11 +72,10 @@ class HistoryAdapter : BaseAdapter(), PinnedSectionListView.PinnedSectionListAda
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val hiv: HistoryItemView
-        if (convertView != null) {
-            hiv = convertView as HistoryItemView
+        val hiv: HistoryItemView = if (convertView != null) {
+            convertView as HistoryItemView
         } else {
-            hiv = HistoryItemView(parent.context, getItemViewType(position))
+            HistoryItemView(parent.context, getItemViewType(position))
         }
         hiv.setHistoryItem(items[position], isMultiselectMode)
         return hiv

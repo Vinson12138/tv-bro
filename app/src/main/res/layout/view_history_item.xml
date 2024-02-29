@@ -1,52 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:paddingLeft="15dp"
-    android:paddingRight="15dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:gravity="center_vertical">
+    android:paddingTop="5dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="5dp">
 
     <CheckBox
+        android:id="@+id/cbSelection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="false"
         android:focusable="false"
-        android:id="@+id/cbSelection"
-        android:visibility="gone"/>
+        android:gravity="center_horizontal"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <TextView
-        android:text="TextView"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:lines="1"
-        android:ellipsize="end"
         android:id="@+id/tvTime"
-        android:gravity="center_horizontal"/>
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:lines="1"
+        android:text="20:30"
+        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:orientation="vertical">
-        <TextView
-            android:text="TextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:lines="1"
-            android:ellipsize="end"
-            android:id="@+id/tvTitle" />
 
         <TextView
-            android:text="TextView"
+            android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:lines="1"
             android:ellipsize="end"
-            android:id="@+id/tvURL" />
+            android:lines="1"
+            android:text="Title"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvURL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="url"
+            android:textSize="12sp" />
     </LinearLayout>
 
 </LinearLayout>

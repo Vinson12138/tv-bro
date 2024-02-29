@@ -1,5 +1,6 @@
 package com.phlox.tvwebbrowser.activity.history
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.CheckBox
@@ -9,7 +10,6 @@ import android.widget.TextView
 import com.phlox.tvwebbrowser.R
 import com.phlox.tvwebbrowser.model.HistoryItem
 
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -17,6 +17,7 @@ import java.util.Date
  * Created by fedex on 29.12.16.
  */
 
+@SuppressLint("ViewConstructor")
 class HistoryItemView(context: Context, private val viewType: Int) : FrameLayout(context) {
     private var tvDate: TextView? = null
     private var tvTitle: TextView? = null
@@ -42,6 +43,7 @@ class HistoryItemView(context: Context, private val viewType: Int) : FrameLayout
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     fun setHistoryItem(historyItem: HistoryItem, multiselectMode: Boolean) {
         this.historyItem = historyItem
         when (viewType) {

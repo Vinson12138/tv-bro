@@ -477,7 +477,7 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
         } else {
             val currentTab = tabsModel.currentTab.value
             if (currentTab == null || currentTab.url == settingsModel.homePage.value) {
-                showMenuOverlay()
+                uiHandler.post(processShowMenuOverlayRunnable)
             }
             if (settingsModel.needAutoCheckUpdates &&
                     settingsModel.updateChecker.versionCheckResult == null &&
@@ -513,8 +513,15 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
         tabsModel.tabsStates.add(index, tab)
         changeTab(tab)
         navigate(url)
+
         if (needToHideMenuOverlay && vb.rlActionBar.visibility == View.VISIBLE) {
             hideMenuOverlay(true)
+        }
+    }
+
+    private var processShowMenuOverlayRunnable: Runnable = Runnable {
+        if (vb.rlActionBar.visibility == View.INVISIBLE || vb.rlActionBar.visibility == View.LAYER_TYPE_NONE) {
+            showMenuOverlay()
         }
     }
 
@@ -846,6 +853,11 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
         else if(keyCode == KeyEvent.KEYCODE_BACK && System.currentTimeMillis() - lastClickBackTime > 2000) {
             lastClickBackTime = System.currentTimeMillis()
             Toast.makeText(this@MainActivity, "再按一次退出", Toast.LENGTH_LONG).show();
+
+            if(vb.rlActionBar.visibility == View.LAYER_TYPE_NONE || vb.rlActionBar.visibility == View.INVISIBLE) {
+                showMenuOverlay()
+            }
+
             return true
         }
         else if (shortcutMgr.canProcessKeyCode(keyCode)) {
@@ -869,6 +881,8 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
     }
 
     private fun showMenuOverlay() {
+        uiHandler.removeCallbacks(processShowMenuOverlayRunnable)
+
         vb.ivMiniatures.visibility = View.VISIBLE
         vb.llBottomPanel.visibility = View.VISIBLE
         vb.flWebViewContainer.visibility = View.INVISIBLE
@@ -1146,7 +1160,7 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
             tab.blockedPopups = 0
         }
 
-        override fun onPageFinished(url: String?, loadFail:Boolean) {
+        override fun onPageFinished(url: String?) {
             if (tab.webView == null || tabsModel.currentTab.value == null) {
                 return
             }
@@ -1176,12 +1190,6 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
             tab.webPageInteractionDetected = false
             if (settingsModel.homePage.value == url) {
                 tab.webView?.loadUrl("javascript:renderSuggestions()")
-            }
-
-            if(loadFail) {
-                if (vb.rlActionBar.visibility == View.INVISIBLE || vb.rlActionBar.visibility == View.LAYER_TYPE_NONE) {
-                    showMenuOverlay()
-                }
             }
         }
 

@@ -37,7 +37,7 @@ class HistoryActivity : AppCompatActivity(), AdapterView.OnItemClickListener, Ad
     private val voiceSearchHelper = VoiceSearchHelper(this, VOICE_SEARCH_REQUEST_CODE,
         VOICE_SEARCH_PERMISSIONS_REQUEST_CODE)
 
-    internal var onListScrollListener: AbsListView.OnScrollListener = object : AbsListView.OnScrollListener {
+    private var onListScrollListener: AbsListView.OnScrollListener = object : AbsListView.OnScrollListener {
         override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
 
         }
