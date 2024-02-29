@@ -64,6 +64,7 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
     private var geoPermissionsCallback: GeolocationPermissions.Callback? = null
     var lastSSLError: SslError? = null
     var trustSsl: Boolean = false
+    var hasLastError: Boolean = false
     private var currentOriginalUrl: Uri? = null
     private val uiHandler = Handler(Looper.getMainLooper())
     private var optimalPageFavIcon: Bitmap? = null
@@ -83,7 +84,7 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
         fun requestPermissions(array: Array<String>, geo: Boolean)
         fun shouldOverrideUrlLoading(url: String): Boolean
         fun onPageStarted(url: String?)
-        fun onPageFinished(url: String?)
+        fun onPageFinished(url: String?, loadFail:Boolean)
         fun onPageCertificateError(url: String?)
         fun isAdBlockingEnabled(): Boolean
         fun isDialogsBlockingEnabled(): Boolean
@@ -229,7 +230,7 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
                     return
                 }
 
-                val activity = callback.getActivity() ?: return
+                val activity = callback.getActivity()
                 webPermissionsRequest = request
                 permRequestDialog = AlertDialog.Builder(activity)
                         .setMessage(activity.getString(R.string.web_perm_request_confirmation, TextUtils.join("\n", request.resources)))
@@ -288,7 +289,7 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
             }
 
             override fun onGeolocationPermissionsShowPrompt(origin: String, callback: GeolocationPermissions.Callback) {
-                val activity = this@WebViewEx.callback.getActivity() ?: return
+                val activity = this@WebViewEx.callback.getActivity()
                 geoPermissionOrigin = origin
                 geoPermissionsCallback = callback
                 permRequestDialog = AlertDialog.Builder(activity)
@@ -390,18 +391,28 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
                 }
                 currentOriginalUrl = Uri.parse(url)
                 callback.onPageStarted(url)
+                hasLastError = false
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 Log.d(TAG, "onPageFinished url: $url")
-                callback.onPageFinished(url)
+                callback.onPageFinished(url, hasLastError)
+
+                if(hasLastError) return
+
                 evaluateJavascript(getGenericJSInjects(), null)
             }
 
             override fun onLoadResource(view: WebView, url: String) {
                 super.onLoadResource(view, url)
-                //Log.d(TAG, "onLoadResource url: $url")
+//                Log.d(TAG, "onLoadResource url: $url")
+            }
+
+            override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                Log.e(TAG, "onReceivedError url: ${request?.url} ${error?.description}")
+                super.onReceivedError(view, request, error)
+                hasLastError = true
             }
 
             override fun onReceivedSslError(view: WebView, handler: SslErrorHandler, error: SslError) {

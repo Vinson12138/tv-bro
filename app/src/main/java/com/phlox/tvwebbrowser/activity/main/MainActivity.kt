@@ -278,7 +278,6 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
             val cal = Calendar.getInstance()
             val hour = cal.get(Calendar.HOUR_OF_DAY)
             val minute = cal.get(Calendar.MINUTE)
-//            val second = cal.get(Calendar.SECOND)
 
             val msg = Message()
             if (minute % 15 == 0) {
@@ -816,6 +815,8 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
         }
     }
 
+    private var lastClickBackTime: Long = 0;
+
     @SuppressLint("RestrictedApi")
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         val shortcutMgr = ShortcutMgr.getInstance()
@@ -841,7 +842,13 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
                 uiHandler.post { vb.flWebViewContainer.exitFingerMode() }
             }
             return true
-        } else if (shortcutMgr.canProcessKeyCode(keyCode)) {
+        }
+        else if(keyCode == KeyEvent.KEYCODE_BACK && System.currentTimeMillis() - lastClickBackTime > 2000) {
+            lastClickBackTime = System.currentTimeMillis()
+            Toast.makeText(this@MainActivity, "再按一次退出", Toast.LENGTH_LONG).show();
+            return true
+        }
+        else if (shortcutMgr.canProcessKeyCode(keyCode)) {
             if (event.action == KeyEvent.ACTION_UP) {
                 uiHandler.post { shortcutMgr.process(keyCode, this) }
             }
@@ -1139,7 +1146,7 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
             tab.blockedPopups = 0
         }
 
-        override fun onPageFinished(url: String?) {
+        override fun onPageFinished(url: String?, loadFail:Boolean) {
             if (tab.webView == null || tabsModel.currentTab.value == null) {
                 return
             }
@@ -1169,6 +1176,12 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
             tab.webPageInteractionDetected = false
             if (settingsModel.homePage.value == url) {
                 tab.webView?.loadUrl("javascript:renderSuggestions()")
+            }
+
+            if(loadFail) {
+                if (vb.rlActionBar.visibility == View.INVISIBLE || vb.rlActionBar.visibility == View.LAYER_TYPE_NONE) {
+                    showMenuOverlay()
+                }
             }
         }
 

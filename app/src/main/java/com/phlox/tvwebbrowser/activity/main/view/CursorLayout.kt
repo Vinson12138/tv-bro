@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.WindowManager
 import android.widget.FrameLayout
 import com.phlox.tvwebbrowser.utils.Utils
+import kotlin.math.abs
 
 
 /**
@@ -103,8 +104,7 @@ class CursorLayout : FrameLayout {
         val keyCode = event.keyCode
 
         if (fullScreenMode) {
-
-
+            //todo
 
         } else {
             when (keyCode) {
@@ -421,8 +421,8 @@ class CursorLayout : FrameLayout {
                     ) * accelerationFactor, maxCursorSpeed
                 )
             )
-            if (Math.abs(cursorSpeed.x) < 0.1f) cursorSpeed.x = 0f
-            if (Math.abs(cursorSpeed.y) < 0.1f) cursorSpeed.y = 0f
+            if (abs(cursorSpeed.x) < 0.1f) cursorSpeed.x = 0f
+            if (abs(cursorSpeed.y) < 0.1f) cursorSpeed.y = 0f
             if (cursorDirection.x == 0 && cursorDirection.y == 0 && cursorSpeed.x == 0f && cursorSpeed.y == 0f) {
                 postDelayed(cursorHideRunnable, CURSOR_DISAPPEAR_TIMEOUT.toLong())
                 return
