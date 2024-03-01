@@ -218,6 +218,14 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
         timer = Timer()
         timer.schedule(timerTask, 0, 1000)
         vb.tvTime.visibility = View.GONE
+
+        NetSpeedUtils.netSpeedCallback = object : NetSpeedUtils.NetSpeedCallback {
+            override fun onNetSpeedChange(downloadSpeed: String, uploadSpeed: String) {
+                vb.tvNetSpeed.run { post {text = "↓$downloadSpeed, ↑$uploadSpeed"} }
+                Log.d(TAG, "↓$downloadSpeed, ↑$uploadSpeed")
+            }
+        }
+        NetSpeedUtils.startMeasuringNetSpeed()
     }
 
     private var progressBarHideRunnable: Runnable = Runnable {
@@ -301,6 +309,7 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
             }
         }
     }
+
 //    override fun closeWindow() {
 //        Log.d(TAG, "closeWindow")
 //        lifecycleScope.launch {

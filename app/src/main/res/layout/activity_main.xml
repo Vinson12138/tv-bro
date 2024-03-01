@@ -272,18 +272,32 @@
         />
 
     <TextView
+        android:id="@+id/tvNetSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="6dp"
+        android:gravity="right"
+        android:outlineProvider="bounds"
+        android:shadowColor="#000000"
+        android:shadowRadius="4"
+        android:text="1231331332"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp" />
+
+    <TextView
         android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="10dp"
         android:gravity="center"
-        android:text="20:12"
-        android:textColor="#ffffff"
-        android:textSize="16sp"
         android:shadowColor="#000000"
         android:shadowRadius="5"
-        />
+        android:text="20:12"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
 
 </RelativeLayout>
